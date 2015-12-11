@@ -10,8 +10,18 @@
 # [*version*]
 #  handle version of telegraf
 #
+# [*install_method*]
+#  Set to 'package' to install Telegraf using .deb or .rpm package.
+#  Set to 'repository' to install Telegraf using an apt or yum repository.
+#  Set to 'local' to use own package infrastructure (like aptly).
+#  Defaults to 'package'.
+#
 # [*install_from_repository *]
 #  Install telegraf from official repository
+#
+#  DEPRICATED COMPATIBILTY MODE for 0.2.0 API of this puppet-module, use
+#  install_method instead!
+#  Option will be REMOVED when Telegraf 0.3.0 is released
 #
 # [*config_base_file*]
 #  path to the base configuration file
@@ -43,6 +53,7 @@
 class telegraf (
   $ensure                    = 'installed',
   $version                   = '0.2.4',
+  $install_method            = 'package',
   $install_from_repository   = true,
   $config_base_file          = '/etc/opt/telegraf/telegraf.conf',
   $config_directory          = '/etc/opt/telegraf/telegraf.d',
@@ -58,7 +69,7 @@ class telegraf (
   $tags                      = undef,
 
   # [agent]
-  $agent_hostname            = 'localhost',
+  $agent_hostname            = $::hostname,
 )
 {
   class { 'telegraf::install': }
