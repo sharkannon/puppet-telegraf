@@ -66,6 +66,65 @@ class telegraf::install {
         }
       }
     }
+    'repo': {
+      if ($my_package_ensure =~ /present|installed|latest/ )) {
+      # package source and provider
+        case $::osfamily {
+          'debian': {
+            case $::operatingsystem {
+              'ubuntu': {
+                apt::source { 'influxdata':
+                  location     => 'https://repos.influxdata.com/ubuntu',
+                  release      => $::lsbdistcodename,
+                  architecture => 'amd64',
+                  repos        => 'stable',
+                  key          => {
+                    id     => '05CE15085FC09D18E99EFB22684A14CF2582E0C5',
+                    source => 'https://repos.influxdata.com/influxdb.key',
+                  },
+                }
+              }
+              'debian': {
+                apt::source{ 'influxdata':
+                  location     => 'https://repos.influxdata.com/debian',
+                  release      => $::lsbdistcodename,
+                  architecture => 'amd64',
+                  repos        => 'stable',
+                  key          => {
+                    id     => '05CE15085FC09D18E99EFB22684A14CF2582E0C5',
+                    source => 'https://repos.influxdata.com/influxdb.key',
+                  },
+                }
+              }
+            }
+            package { 'telegraf':
+              ensure  => present,
+            }
+          }
+          'redhat': {
+             yumrepo { 'influxdata':
+              descr    => 'InfluxData Repository - RHEL/Centos $releasever',
+              baseurl  => 'https://repos.influxdata.com/rhel/$releasever/$basearch/stable',
+              gpgcheck => 1,
+              gpgkey   => 'https://repos.influxdata.com/influxdb.key',
+              enabled  => 1,
+            }
+            package { 'telegraf':
+              ensure  => present,
+            }
+          }
+          default: {
+            fail("OS ${::osfamily} not supported")
+          }
+        }
+      }
+      else {
+        # install / purge the package
+        package { 'telegraf':
+          ensure => $my_package_ensure,
+        }
+      }
+    }
   }
   default: {
     fail("Installation method ${::telegraf::install_method} not supported")
