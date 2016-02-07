@@ -4,7 +4,7 @@
 
 This Puppet module installs and manages [InfluxDB Telegraf](https://github.com/influxdb/telegraf).
 
-Use this puppet module to install and configure [InfluxDB Telegraf](https://github.com/influxdb/telegraf) with version 0.2.4 and newer.
+Use this puppet module to install and configure [InfluxDB Telegraf](https://github.com/influxdb/telegraf) with version 0.10.2 and newer.
 
 #### Table of Contents
 
@@ -29,7 +29,7 @@ The installed package for telegraf will be fetched from
   a) the provided package from get.influxdb.com or
   b) the provided package from your own repository (apt repository, aptly, yum)
 
-Remark: The apt / yum repository from InfluxData will be included in version 0.3.0 of this module.
+Remark: The apt / yum repository from InfluxData will be included in version 0.10.x of this module.
 
 ## Setup
 
@@ -43,7 +43,7 @@ Include the class and set the necessary Telegraf and InfluxDB parameters.
 
 ```
 class { '::telegraf':
-    version                   => '0.2.4',
+    version                   => '0.10.x',
     install_from_repository   => false,
     config_template           => 'telegraf/telegraf.conf.erb',
     # [outputs.influxdb] section of telegraf.conf
@@ -60,7 +60,7 @@ This puppet-telegraf module supports the following configuration options:
 ```
 class { '::telegraf':
     ensure                    => 'installed',
-    version                   => '0.2.4',
+    version                   => '0.10.x',
     install_from_repository   => false,
     config_template           => 'telegraf/telegraf.conf.erb',
     config_base_file          => '/etc/opt/telegraf/telegraf.conf',
@@ -75,23 +75,24 @@ class { '::telegraf':
 
     # [tags] section of telegraf.conf
     tags                      => {
-      virtual            => $::virtual,
-      lsbdistdescription => $::lsbdistdescription,
-      environment        => $::my_own_facter_environment,
-      location           => $::my_own_facter_location,
+      virtual                 => $::virtual,
+      lsbdistdescription      => $::lsbdistdescription,
+      environment             => $::my_own_facter_environment,
+      location                => $::my_own_facter_location,
     }
 
     # [agent]
     agent_hostname            => $::hostname,
     agent_interval            => '10s',
+    agent_flush_interval      => '10s',
 
     # [[plugins.cpu]]
     cpu_percpu                => true,
     cpu_totalcpu              => true,
-    cpu_drop                  => ["cpu_time"],
+    cpu_drop                  => ["time_*"],
 
     # [[plugins.disk]]
-    disk_mountpoints           = ["/","/home"],
+    disk_mountpoints          => ["/","/home"],
 }
 ```
 
@@ -167,7 +168,7 @@ vagrant up
 ## License
 
 Licensed under the MIT License.
-Copyright 2015 Roman Plessl (@rplessl)
+Copyright 2015-2016 Roman Plessl (@rplessl)
 
 See [LICENSE](https://github.com/rplessl/puppet-telegraf/blob/master/LICENSE) File
 
