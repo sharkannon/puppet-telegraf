@@ -1,3 +1,8 @@
+## v0.10.0 [not released]
+
+* New upstream version 0.10.x with Conifguration File / API changes (#19)-- @rplessl
+* parametrized agent_interval and agent_flush_interval (#18) -- Thanks @ntent-ashton!
+
 ## v0.2.4 [2015-12-25]
 
 * Enhanced documenttion for using pulgins (Closes #16, #17) -- @rplessl
