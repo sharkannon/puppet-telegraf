@@ -39,7 +39,7 @@ class telegraf::params {
   # [[plugins.cpu]]
   $cpu_percpu                 = true
   $cpu_totalcpu               = true
-  $cpu_drop                   = ['cpu_time']
+  $cpu_drop                   = ['time_*']
 
   # [[plugins.disk]]
   # The default value for this is NO value.
