@@ -1,0 +1,12 @@
+# Statsd Server
+[[inputs.statsd]]
+  service_address = "<%= @service_address %>"
+  delete_gauges = <%= @delete_gauges %>
+  delete_counters = <%= @delete_counters %>
+  delete_sets = <%= @delete_sets %>
+  delete_timings = <%= @delete_timings %>
+  percentiles = [90]
+  convert_names = <%= @convert_names %>
+  allowed_pending_messages = <%= @allowed_pending_messages %>
+  percentile_limit = <%= @percentile_limit %>
+  udp_packet_size = <%= @udp_packet_size %>
